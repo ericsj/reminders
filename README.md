@@ -7,7 +7,7 @@ Please don't use a `calendar` library, we would like to see your own calendar lo
 
 ### The Task
 
-You should start by rendering a single month view of a calendar for the current month – along with the lines of the `calendar` image in this project.
+In this task we are building a single month view of a calendar for the current month. [Here](https://www.figma.com/file/TR3YH8mNhFHecK6lm8kj21/Codelitt-Calendar?node-id=0%3A1) you have the design we are expecting for this task.
 
 
 ### Features & Requirements:
@@ -23,8 +23,9 @@ You should start by rendering a single month view of a calendar for the current 
 
 ### Notes:
 
-* The data should be retained across different page views, but it’s not necessary to persist it beyond a browser refresh.
-* Here at Codelitt we make products for humans, this means that we will evaluate the UX of the exercise.
+1. We expect the solution to be as close to the final design as possible, but we will understand if there are small differences.
+2. Make sure to provide a tutorial on how to run your application
+3. The data should be retained across different page views, but it’s not necessary to persist it beyond a browser refresh.
 
 ## Evaluation
 
@@ -50,7 +51,7 @@ You should start by rendering a single month view of a calendar for the current 
 ## F.A.Q.
 
 ### Is it necessary to connect to a backend?
-No, this is a simply frontend exercise.
+No, this is a frontend only exercise.
 
 ### How do you evaluate the exercise?
 For every exercise we have two senior frontend engineers from our team reviewing the code and the functionality and giving a score for each line item as shown in the previous table.
