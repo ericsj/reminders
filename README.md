@@ -12,7 +12,7 @@ In this task we are building a single month view of a calendar for the current m
 
 ### Features & Requirements:
 
-* You need to use one of the following state management libraries: Relay, Apollo, MobX or Redux
+* You need to use one state management libraries.
 * Ability to add a new “reminder” (max 30 chars) for a user entered day and time.
 * Display reminders on the calendar view in the correct time order.
 * Allow the user to select a color when creating a reminder and display it appropriately.
