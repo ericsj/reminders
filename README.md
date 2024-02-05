@@ -7,7 +7,7 @@ Please don't use a `calendar` library, we would like to see your own calendar lo
 
 ### The Task
 
-In this task we are building a single month view of a calendar for the current month. [Here](https://www.figma.com/file/TR3YH8mNhFHecK6lm8kj21/Codelitt-Calendar?node-id=0%3A1) you have the design we are expecting for this task.
+In this task we are building a single month view of a calendar for the current month. [Here](https://www.figma.com/file/TR3YH8mNhFHecK6lm8kj21/Codelitt-Calendar?node-id=0%3A1) you have the design we are expecting for this task. Besides, we expect you to integrate with this backend [here](https://api.calendar.codelitt.dev/docs).
 
 
 ### Features & Requirements:
