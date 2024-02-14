@@ -52,7 +52,7 @@ In this task we are building a single month view of a calendar for the current m
 ## F.A.Q.
 
 ### Is it necessary to connect to a backend?
-No, this is a frontend only exercise.
+Yes, as outlined in the exercise description. 
 
 ### How do you evaluate the exercise?
 For every exercise we have two senior frontend engineers from our team reviewing the code and the functionality and giving a score for each line item as shown in the previous table.
