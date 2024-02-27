@@ -1,11 +1,12 @@
 import { Box } from '@mui/material'
-import React from 'react'
+import { ReactComponent as CodelittLogo } from '../assets/codelitt-logo.svg'
 
-function layout() {
+export function Layout() {
   return (
-    <Box>
-    </Box>
+    <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start', rowGap: '50px' }}>
+      <CodelittLogo />
+
+    </Box >
   )
 }
 
-export default layout
