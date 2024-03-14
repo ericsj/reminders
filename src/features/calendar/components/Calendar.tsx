@@ -7,12 +7,16 @@ export function Calendar() {
     <Grid container columns={{ xs: 7 }}>
       {weekDays.map((day) => (
         <Grid item xs={1}>
-          <Typography>{day}</Typography>
+          <Typography sx={{ textAlign: "center", color: "primary.main" }}>
+            {day}
+          </Typography>
         </Grid>
       ))}
       {monthsConfigurations[new Date().getMonth()].map((day) => (
         <Grid item xs={1}>
-          <Typography>{day}</Typography>
+          <Typography sx={{ textAlign: "center", color: "primary.main" }}>
+            {day}
+          </Typography>
         </Grid>
       ))}
     </Grid>

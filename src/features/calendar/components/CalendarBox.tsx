@@ -9,6 +9,7 @@ export function CalendarBox() {
         display: "flex",
         flexDirection: "column",
         rowGap: "15px",
+        alignItems: "center",
       }}
     >
       <Arrows />

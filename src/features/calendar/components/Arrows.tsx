@@ -5,7 +5,15 @@ import { ReactComponent as PointNav } from "../../../assets/point-navigation.svg
 
 export function Arrows() {
   return (
-    <Box sx={{ columnGap: "5px" }}>
+    <Box
+      sx={{
+        display: "flex",
+        columnGap: "5px",
+        width: "70px",
+        alignItems: "center",
+        justifyContent: "space-between",
+      }}
+    >
       <ChevronLeft />
       <PointNav />
       <ChevronRight />

@@ -3,6 +3,7 @@ import { getDayOfWeekName } from "../util/getDayOfWeekName";
 import { getMonthName } from "../util/getMonthName";
 import { NoReminder } from "../features/reminders/components/NoReminder";
 import { CalendarBox } from "../features/calendar/components/CalendarBox";
+import { CalendarContainer } from "../features/calendar/components/CalendarContainer";
 
 export function RemindersAndCalendar() {
   const currentDate = `${getDayOfWeekName()}, ${getMonthName()} ${new Date().getDate()} ${new Date().getFullYear()}`;
@@ -30,6 +31,7 @@ export function RemindersAndCalendar() {
           sx={{
             display: "flex",
             justifyContent: "space-around",
+            alignItems: "center",
             width: "100%",
           }}
         >
@@ -38,7 +40,6 @@ export function RemindersAndCalendar() {
               display: "flex",
               justifyContent: "space-between",
               padding: "0 40px 0 40px",
-              alignItems: "center",
               width: "100%",
             }}
           >
@@ -53,13 +54,14 @@ export function RemindersAndCalendar() {
             </Typography>
             <Button
               variant="contained"
-              style={{
+              sx={{
                 background: "linear-gradient(90deg, #FF465D 0%, #BC46BA 100%)",
                 width: "180px",
                 height: "49px",
                 fontSize: "16px",
                 textTransform: "none",
                 borderRadius: "0px 4px 4px 0px",
+                color: "primary.main",
               }}
             >
               Add reminder
@@ -71,7 +73,7 @@ export function RemindersAndCalendar() {
           Spacer
         </Grid>
       </Grid>
-      <CalendarBox />
+      <CalendarContainer />
     </Box>
   );
 }
