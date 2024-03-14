@@ -4,7 +4,6 @@ import {
   Divider,
   FormGroup,
   FormLabel,
-  Grid,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,7 +13,7 @@ import { reminderInitial } from "../../../constants/reminderInitial";
 import { IReminderFormatted } from "../interfaces";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-import { addReminder } from "../remindersSlice";
+import { createReminder, setTab } from "../remindersSlice";
 import { reminderColors } from "../../../constants/reminderColors";
 
 export const AddReminder = () => {
@@ -23,7 +22,7 @@ export const AddReminder = () => {
   return (
     <Formik
       initialValues={reminderInitial}
-      onSubmit={async (values) => dispatch(addReminder(values))}
+      onSubmit={async (values) => dispatch(createReminder(values))}
     >
       {(props: FormikProps<IReminderFormatted>) => (
         <Form>
@@ -34,6 +33,7 @@ export const AddReminder = () => {
               justifyContent: "center",
               rowGap: "40px",
               padding: "0 40px 0 40px",
+              boxSizing: "border-box",
               width: "669px",
               height: "100%",
             }}
@@ -47,7 +47,7 @@ export const AddReminder = () => {
             >
               {`Add Reminder - ${getCurrentDate()}`}
             </Typography>
-            <Field name="name">
+            <Field name="title">
               {({ field, meta }) => (
                 <FormGroup>
                   <FormLabel>Title</FormLabel>
@@ -84,7 +84,7 @@ export const AddReminder = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Field name="Date">
+              <Field name="date">
                 {({ field, meta }) => (
                   <FormGroup>
                     <FormLabel>Date</FormLabel>
@@ -99,10 +99,10 @@ export const AddReminder = () => {
                   </FormGroup>
                 )}
               </Field>
-              <Field name="TIME">
+              <Field name="time">
                 {({ field, meta }) => (
                   <FormGroup>
-                    <FormLabel>TIME</FormLabel>
+                    <FormLabel>time</FormLabel>
                     <TextField
                       required
                       size="small"
@@ -115,19 +115,34 @@ export const AddReminder = () => {
                 )}
               </Field>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              {reminderColors.map((color) => (
+            <Field name="color">
+              {() => (
                 <Box
                   sx={{
-                    width: "55px",
-                    height: "48px",
-                    borderRadius: "6%",
-                    border: "1px solid rgba(49,39,37,0.4)",
-                    backgroundColor: color,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    height: "58px",
+                    alignItems: "center",
                   }}
-                ></Box>
-              ))}
-            </Box>
+                >
+                  {reminderColors.map((color) => (
+                    <Box
+                      sx={{
+                        width: "55px",
+                        height: "48px",
+                        borderRadius: "6%",
+                        border:
+                          props.values.color === color
+                            ? "6px solid #101277"
+                            : "1px solid rgba(49,39,37,0.4)",
+                        backgroundColor: `#${color}`,
+                      }}
+                      onClick={() => props.setFieldValue("color", color)}
+                    ></Box>
+                  ))}
+                </Box>
+              )}
+            </Field>
             <Divider />
             <Box
               sx={{
@@ -145,11 +160,15 @@ export const AddReminder = () => {
                     width: "123px",
                     height: "49px",
                   }}
+                  onClick={() => {
+                    dispatch(setTab("list"));
+                  }}
                 >
                   Cancel
                 </Button>
                 <Button
                   variant="contained"
+                  type="submit"
                   sx={{
                     backgroundColor: "secondary.A100",
                     color: "primary.main",

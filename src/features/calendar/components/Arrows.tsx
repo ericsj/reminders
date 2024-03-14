@@ -15,14 +15,16 @@ export function Arrows() {
   const dispatch: AppDispatch = useDispatch();
   const newMonth = useSelector(selectMonth);
   const handleClick = (direction: number) => {
-    dispatch(setReminderStatus("loading"));
-    if (direction === 1) {
-      dispatch(move(1));
-    } else {
-      dispatch(move(-1));
+    if (newMonth > 0 && newMonth < 11) {
+      dispatch(setReminderStatus("loading"));
+      const newMonthQuery = `${dayjs().format("YYYY")}-${`0${newMonth}`.slice(-2)}`;
+      dispatch(fetchReminders(newMonthQuery));
+      if (direction === 1) {
+        dispatch(move(1));
+      } else {
+        dispatch(move(-1));
+      }
     }
-    const newMonthQuery = `${dayjs().format("YYYY")}-${`0${newMonth + 1}`.slice(-2)}`;
-    dispatch(fetchReminders(newMonthQuery));
   };
   return (
     <Box

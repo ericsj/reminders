@@ -1,8 +1,12 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { selectDay, selectSelectedDay } from "../calendarSlice";
-import { selectReminderDates } from "../../reminders/remindersSlice";
+import { selectDay, selectMonth, selectSelectedDay } from "../calendarSlice";
+import {
+  refreshReminder,
+  selectReminderDates,
+} from "../../reminders/remindersSlice";
 import { ReactComponent as NotificationPoint } from "../../../assets/point-reminder.svg";
+import { AppDispatch } from "../../../app/store";
 
 type IDayProps = {
   day: number;
@@ -10,15 +14,22 @@ type IDayProps = {
 
 export const Day = ({ day }: IDayProps) => {
   const selectedDay = useSelector(selectSelectedDay);
+  const month = useSelector(selectMonth);
   const reminderDates = useSelector(selectReminderDates);
-  const dispatch = useDispatch();
-  const dayHasEvents = reminderDates.map((date) => date.date()).includes(day);
+  const dispatch: AppDispatch = useDispatch();
+  const dayHasEvents = reminderDates
+    .map((date) => date.date() + 1)
+    .includes(day);
+  const handleClick = () => {
+    dispatch(selectDay(day));
+    dispatch(refreshReminder({ month, day }));
+  };
   const isSelected = selectedDay === day;
   return (
     <Grid
       item
       xs={1}
-      onClick={() => dispatch(selectDay(day))}
+      onClick={() => handleClick()}
       sx={{
         display: "flex",
         justifyContent: "center",

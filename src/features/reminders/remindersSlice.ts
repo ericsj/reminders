@@ -3,11 +3,12 @@ import axios from "axios";
 import {
   IFetchRemindersResponse,
   IPrepareReminder,
+  IRefreshReminderArgs,
   IReminderApiResponse,
-  IReminderCreate,
+  IReminderDate,
   IReminderFormatted,
-  IReminderPatch,
   IReminderState,
+  IUpdateReminderArgs,
 } from "./interfaces";
 import { RootState } from "../../app/store";
 import dayjs from "dayjs";
@@ -18,26 +19,28 @@ const REMINDERS_TOKEN = process.env.REACT_APP_TOKEN as string;
 const initialState = {
   reminders: [],
   status: "idle",
+  reminderToEdit: undefined,
   tab: "list",
+  filteredReminders: [],
   reminderDates: [],
   error: undefined,
 } as IReminderState;
 
 export const fetchReminders = createAsyncThunk(
   "reminders/fetchReminders",
-  async (date: string) => {
+  async (baseDate: string) => {
     try {
-      const datesUrl = `${REMINDERS_URL}/${REMINDERS_TOKEN}?date=${date}`;
-      const datesStr = (await axios.get<string[]>(datesUrl)).data;
-      const dates = datesStr.map((isoDate) => dayjs(isoDate));
+      const datesUrl = `${REMINDERS_URL}/${REMINDERS_TOKEN}?date=${baseDate}`;
+      const datesStr = (await axios.get<IReminderDate[]>(datesUrl)).data;
+      const dates = datesStr.map((isoDate) => dayjs(isoDate.date));
       const reminders = await Promise.all(
         dates.map(async (date) => {
-          const url = `${REMINDERS_URL}/${REMINDERS_TOKEN}/by-day?date=${date.format("YYYY-MM-DD")}`;
+          const url = `${REMINDERS_URL}/${REMINDERS_TOKEN}/by-day?date=${date.add(1, "day").format("YYYY-MM-DD")}`;
           const response = await axios.get<IReminderApiResponse[]>(url);
           return response.data;
         })
       );
-      return { dates, reminders };
+      return { dates, reminders: reminders.flat() };
     } catch (err) {
       return err.message;
     }
@@ -45,11 +48,18 @@ export const fetchReminders = createAsyncThunk(
 );
 export const createReminder = createAsyncThunk(
   "reminders/createReminder",
-  async (data: IReminderCreate) => {
+  async (data: IReminderFormatted) => {
+    const apiData = {
+      title: data.title,
+      description: data.description,
+      date: data.date.toISOString(),
+      color: data.color,
+      token: REMINDERS_TOKEN,
+    };
     try {
       const response = await axios.post<IReminderApiResponse>(
-        REMINDERS_URL,
-        data
+        `${REMINDERS_URL}`,
+        apiData
       );
       return response.data;
     } catch (err) {
@@ -57,10 +67,6 @@ export const createReminder = createAsyncThunk(
     }
   }
 );
-interface IUpdateReminderArgs {
-  id: string;
-  data: IReminderPatch;
-}
 export const updateReminder = createAsyncThunk(
   "reminders/updateReminder",
   async ({ id, data }: IUpdateReminderArgs) => {
@@ -110,6 +116,14 @@ const remindersSlice = createSlice({
     setTab: (state, action: PayloadAction<string>) => {
       state.tab = action.payload;
     },
+    refreshReminder(state, action: PayloadAction<IRefreshReminderArgs>) {
+      state.filteredReminders = state.reminders.filter(
+        (reminder) =>
+          reminder.date.date() === action.payload.day &&
+          reminder.date.month() === action.payload.month
+      );
+    },
+    setReminderToEdit: (state, action: PayloadAction<IReminderFormatted>) => {},
   },
   extraReducers(builder) {
     builder
@@ -124,11 +138,11 @@ const remindersSlice = createSlice({
             id: reminder.id,
             title: reminder.title,
             description: reminder.description,
-            date: dayjs(new Date(reminder.date)),
+            date: dayjs(reminder.date),
             color: reminder.color,
           }));
           state.reminderDates = action.payload.dates;
-          state.reminders = state.reminders.concat(loadedReminders);
+          state.reminders = loadedReminders;
         }
       )
       .addCase(fetchReminders.rejected, (state, action) => {
@@ -184,9 +198,16 @@ export const selectRemindersStatus = (state: RootState) =>
   state.reminders.status;
 export const selectReminderDates = (state: RootState) =>
   state.reminders.reminderDates;
+export const selectFilteredReminders = (state: RootState) =>
+  state.reminders.filteredReminders;
 export const selectReminderById = (state: RootState, reminderId) =>
   state.reminders.reminders.find((reminder) => reminder.id === reminderId);
 export const getRemindersError = (state: RootState) => state.reminders.error;
-export const { setReminderStatus, setTab, addReminder } =
-  remindersSlice.actions;
+export const {
+  setReminderStatus,
+  setTab,
+  addReminder,
+  refreshReminder,
+  setReminderToEdit,
+} = remindersSlice.actions;
 export default remindersSlice.reducer;

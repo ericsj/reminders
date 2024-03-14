@@ -1,4 +1,4 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { ReactComponent as CodelittLogo } from "../assets/codelitt-logo.svg";
 import { RemindersAndCalendar } from "./RemindersAndCalendar";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,9 +6,7 @@ import {
   fetchReminders,
   selectRemindersStatus,
 } from "../features/reminders/remindersSlice";
-import { Error } from "./Error";
 import { useEffect } from "react";
-import dayjs from "dayjs";
 import { AppDispatch } from "../app/store";
 
 export function Layout() {
@@ -16,7 +14,9 @@ export function Layout() {
   const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
     if (remindersStatus === "idle") {
-      const currentDate = dayjs().format("YYYY-MM");
+      const date = new Date();
+      const month = `0${date.getMonth() + 1}`.slice(-2);
+      const currentDate = `${date.getFullYear()}-${month}`;
       dispatch(fetchReminders(currentDate));
     }
   }, [remindersStatus, dispatch]);

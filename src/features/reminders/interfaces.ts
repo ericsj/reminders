@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 
 export interface IReminderCreate {
-  token: string;
   title: string;
   description: string;
   date: string;
@@ -23,13 +22,24 @@ export type IFetchRemindersResponse = {
   dates: dayjs.Dayjs[];
 };
 
+export type IReminderDate = {
+  date: string;
+};
+
 export type IReminderPatch = {
   title: string;
   description: string;
   date: string;
   color: string;
 };
-
+export interface IUpdateReminderArgs {
+  id: string;
+  data: IReminderPatch;
+}
+export interface IRefreshReminderArgs {
+  month: number;
+  day: number;
+}
 export type IReminderFormatted = {
   id: string;
   title: string;
@@ -40,6 +50,8 @@ export type IReminderFormatted = {
 
 export interface IReminderState {
   reminders: IReminderFormatted[];
+  filteredReminders: IReminderFormatted[];
+  reminderToEdit: IReminderFormatted | undefined;
   status: string;
   tab: string;
   reminderDates: dayjs.Dayjs[];
