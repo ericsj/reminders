@@ -5,6 +5,7 @@ export function NoReminder() {
   return (
     <Grid
       item
+      xs={8}
       sx={{
         display: "flex",
         flexDirection: "column",

@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { IReminderFormatted } from "./interfaces";
-import { ReactComponent as Clock } from "../../assets/Clock.svg";
+import { ReactComponent as Clock } from "../../assets/clock.svg";
 import { ReactComponent as Edit } from "../../assets/edit.svg";
 
 type IReminderModalProps = {

@@ -4,39 +4,23 @@ import { RemindersAndCalendar } from "./RemindersAndCalendar";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchReminders,
-  getRemindersStatus,
+  selectRemindersStatus,
 } from "../features/reminders/remindersSlice";
 import { Error } from "./Error";
 import { useEffect } from "react";
+import dayjs from "dayjs";
+import { AppDispatch } from "../app/store";
 
 export function Layout() {
-  const remindersStatus = useSelector(getRemindersStatus);
-  const dispatch = useDispatch();
+  const remindersStatus = useSelector(selectRemindersStatus);
+  const dispatch: AppDispatch = useDispatch();
   useEffect(() => {
     if (remindersStatus === "idle") {
-      dispatch(fetchReminders() as any);
+      const currentDate = dayjs().format("YYYY-MM");
+      dispatch(fetchReminders(currentDate));
     }
   }, [remindersStatus, dispatch]);
 
-  let remindersContent;
-  switch (remindersStatus) {
-    case "loading":
-      remindersContent = <CircularProgress />;
-      break;
-    case "succeeded":
-      remindersContent = (
-        <>
-          <Box sx={{ width: "1119px" }}>
-            <CodelittLogo />
-          </Box>
-          <RemindersAndCalendar />
-        </>
-      );
-      break;
-    case "failed":
-      remindersContent = <Error />;
-      break;
-  }
   return (
     <Box
       sx={{
@@ -50,7 +34,10 @@ export function Layout() {
         height: "100%",
       }}
     >
-      {remindersContent}
+      <Box sx={{ width: "1119px" }}>
+        <CodelittLogo />
+      </Box>
+      <RemindersAndCalendar />
     </Box>
   );
 }
