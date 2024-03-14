@@ -2,29 +2,76 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import { getDayOfWeekName } from "../util/getDayOfWeekName";
 import { getMonthName } from "../util/getMonthName";
 import { NoReminder } from "../features/reminders/components/NoReminder";
+import { CalendarBox } from "../features/calendar/components/CalendarBox";
 
 export function RemindersAndCalendar() {
-    const currentDate = `${getDayOfWeekName()}, ${getMonthName()} ${(new Date()).getDate()} ${new Date().getFullYear()}`
-    return (
-        <Box sx={{ display: 'flex', width: '1119px', height: '686px', borderRadius: '40px', backgroundColor: 'white' }}>
-            <Grid container sx={{ gridTemplateRows: '1fr 8fr 1fr', gridTemplateColumns: '1fr', width: '669px' }}>
-                <Grid item sx={{
-                    display: 'flex', justifyContent: 'space-around', width: '100%'
-                }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', padding: '0 20px 0 20px', alignItems: 'center', width: '100%' }}>
-                        <Typography>{currentDate}</Typography>
-                        <Button
-                            variant="contained"
-                            style={{
-                                background: "linear-gradient(90deg, #FF465D 0%, #BC46BA 100%)"
-                            }}
-                        >Add reminder
-                        </Button>
-                    </Box>
-                </Grid>
-                <NoReminder />
-                <Grid item sx={{ visibility: 'hidden' }}>Spacer</Grid>
-            </Grid>
-        </Box>
-    )
+  const currentDate = `${getDayOfWeekName()}, ${getMonthName()} ${new Date().getDate()} ${new Date().getFullYear()}`;
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        width: "1119px",
+        height: "686px",
+        borderRadius: "40px",
+        backgroundColor: "white",
+      }}
+    >
+      <Grid
+        container
+        sx={{
+          gridTemplateRows: "1fr 8fr 1fr",
+          gridTemplateColumns: "1fr",
+          width: "669px",
+        }}
+      >
+        <Grid
+          item
+          sx={{
+            display: "flex",
+            justifyContent: "space-around",
+            width: "100%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "0 40px 0 40px",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Typography
+              sx={{
+                fontSize: "24px",
+                fontWeight: 600,
+                color: "#384042",
+              }}
+            >
+              {currentDate}
+            </Typography>
+            <Button
+              variant="contained"
+              style={{
+                background: "linear-gradient(90deg, #FF465D 0%, #BC46BA 100%)",
+                width: "180px",
+                height: "49px",
+                fontSize: "16px",
+                textTransform: "none",
+                borderRadius: "0px 4px 4px 0px",
+              }}
+            >
+              Add reminder
+            </Button>
+          </Box>
+        </Grid>
+        <NoReminder />
+        <Grid item sx={{ visibility: "hidden" }}>
+          Spacer
+        </Grid>
+      </Grid>
+      <CalendarBox />
+    </Box>
+  );
 }

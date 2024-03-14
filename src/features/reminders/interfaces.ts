@@ -38,3 +38,11 @@ export interface IReminderState {
     status: string;
     error: string | undefined;
 }
+
+export interface IPrepareReminder {
+    id: string;
+    title: string;
+    description: string;
+    date: dayjs.Dayjs;
+    color: string;
+}

@@ -1,11 +1,11 @@
-import { createSlice, nanoid, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IReminderApiResponse, IReminderCreate, IReminderFormatted, IReminderGet, IReminderPatch, IReminderState } from "./interfaces";
+import { IPrepareReminder, IReminderApiResponse, IReminderCreate, IReminderFormatted, IReminderPatch, IReminderState } from "./interfaces";
 import { RootState } from "../../app/store";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
-const REMINDERS_URL = process.env.REACT_APP_API
-const REMINDERS_TOKEN = process.env.REACT_APP_TOKEN
+const REMINDERS_URL = process.env.REACT_APP_API as string
+const REMINDERS_TOKEN = process.env.REACT_APP_TOKEN as string
 
 const initialState = {
     reminders: [],
@@ -15,7 +15,12 @@ const initialState = {
 
 export const fetchReminders = createAsyncThunk('reminders/fetchReminders', async () => {
     try {
-        const response = await axios.get<IReminderApiResponse[]>(`${REMINDERS_URL}/${REMINDERS_TOKEN}`)
+        const currentDate = new Date()
+        const year = currentDate.getFullYear();
+        const month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+        const day = ('0' + currentDate.getDate()).slice(-2);
+        const url = `${REMINDERS_URL}/${REMINDERS_TOKEN}/by-day?date=${year}-${month}-${day}`
+        const response = await axios.get<IReminderApiResponse[]>(url)
         return response.data
     } catch (err) {
         return err.message
@@ -49,13 +54,7 @@ export const updateReminder = createAsyncThunk('reminders/updateReminder', async
     }
 })
 
-interface IPrepare {
-    id: string;
-    title: string;
-    description: string;
-    date: dayjs.Dayjs;
-    color: string;
-}
+
 const remindersSlice = createSlice({
     initialState,
     name: "reminders",
@@ -64,11 +63,12 @@ const remindersSlice = createSlice({
             reducer: (state, action: PayloadAction<IReminderFormatted>) => {
                 state.reminders.push(action.payload);
             },
-            prepare: ({ id,
-                title,
-                description,
-                date,
-                color }: IPrepare) => {
+            prepare: (props: IPrepareReminder) => {
+                const { id,
+                    title,
+                    description,
+                    date,
+                    color } = props
                 return {
                     payload: {
                         id,
@@ -80,6 +80,9 @@ const remindersSlice = createSlice({
                 };
             },
         },
+        setReminderStatus: (state, action: PayloadAction<string>) => {
+            state.status = action.payload
+        }
     },
     extraReducers(builder) {
         builder
@@ -145,5 +148,5 @@ export const selectAllReminders = (state: RootState) => state.reminders.reminder
 export const getRemindersStatus = (state: RootState) => state.reminders.status;
 export const selectReminderById = (state: RootState, reminderId) => state.reminders.reminders.find(reminder => reminder.id === reminderId);
 export const getRemindersError = (state: RootState) => state.reminders.error;
-export const { reactionAdded, setReminderStatus } = remindersSlice.actions;
+export const { setReminderStatus } = remindersSlice.actions;
 export default remindersSlice.reducer;

@@ -9,13 +9,10 @@ export const theme = createTheme({
     },
     palette: {
         primary: {
-            main: "#081440",
-        },
-        secondary: {
             main: "#ffffff",
         },
-        text: {
-            primary: "#ffffff",
+        secondary: {
+            main: "#384042",
         },
         info: {
             main: "#767A7B",
