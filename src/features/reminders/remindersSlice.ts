@@ -120,7 +120,7 @@ const remindersSlice = createSlice({
       state.filteredReminders = state.reminders.filter(
         (reminder) =>
           reminder.date.date() === action.payload.day &&
-          reminder.date.month() === action.payload.month
+          reminder.date.month() + 1 === action.payload.month
       );
     },
     setFilteredReminders(state, action: PayloadAction<IReminderFormatted[]>) {
