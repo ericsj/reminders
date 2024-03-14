@@ -4,6 +4,7 @@ import { ReminderList } from "../features/reminders/components/ReminderList";
 import { AddReminder } from "../features/reminders/components/AddReminder";
 import { useSelector } from "react-redux";
 import { selectTab } from "../features/reminders/remindersSlice";
+import { EditReminder } from "../features/reminders/components/EditReminder";
 
 export function RemindersAndCalendar() {
   const tab = useSelector(selectTab);
@@ -11,7 +12,7 @@ export function RemindersAndCalendar() {
   if (tab === "add") {
     content = <AddReminder />;
   } else if (tab === "edit") {
-    // content = <ReminderModal setAdding={setAdding} />;
+    content = <EditReminder />;
   }
   return (
     <Box

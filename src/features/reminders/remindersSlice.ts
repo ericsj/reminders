@@ -123,7 +123,12 @@ const remindersSlice = createSlice({
           reminder.date.month() === action.payload.month
       );
     },
-    setReminderToEdit: (state, action: PayloadAction<IReminderFormatted>) => {},
+    setFilteredReminders(state, action: PayloadAction<IReminderFormatted[]>) {
+      state.filteredReminders = action.payload;
+    },
+    setReminderToEdit: (state, action: PayloadAction<IReminderFormatted>) => {
+      state.reminderToEdit = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -196,6 +201,8 @@ export const selectAllReminders = (state: RootState) =>
 export const selectTab = (state: RootState) => state.reminders.tab;
 export const selectRemindersStatus = (state: RootState) =>
   state.reminders.status;
+export const selectReminderToEdit = (state: RootState) =>
+  state.reminders.reminderToEdit;
 export const selectReminderDates = (state: RootState) =>
   state.reminders.reminderDates;
 export const selectFilteredReminders = (state: RootState) =>
@@ -209,5 +216,6 @@ export const {
   addReminder,
   refreshReminder,
   setReminderToEdit,
+  setFilteredReminders,
 } = remindersSlice.actions;
 export default remindersSlice.reducer;

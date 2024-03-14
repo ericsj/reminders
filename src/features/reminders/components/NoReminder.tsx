@@ -1,17 +1,16 @@
-import { Grid, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ReactComponent as CalendarLogo } from "../../../assets/calendar-logo.svg";
 
 export function NoReminder() {
   return (
-    <Grid
-      item
-      xs={8}
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
         width: "100%",
+        height: "500px",
       }}
     >
       <CalendarLogo />
@@ -20,6 +19,6 @@ export function NoReminder() {
       >
         No reminders registered so far
       </Typography>
-    </Grid>
+    </Box>
   );
 }

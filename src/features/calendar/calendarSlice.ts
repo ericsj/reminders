@@ -1,9 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ICalendarState } from "./interfaces";
 import { RootState } from "../../app/store";
+import dayjs from "dayjs";
 
 const initialState = {
-  currentMonth: new Date().getMonth(),
+  currentMonth: dayjs().month() + 1,
   selectedDay: 1,
 } as ICalendarState;
 
@@ -18,14 +19,13 @@ const calendarSlice = createSlice({
         if (state.currentMonth > 0) state.currentMonth--;
       }
     },
-    selectDay: (state, action: PayloadAction<number>) => {
+    setDay: (state, action: PayloadAction<number>) => {
       state.selectedDay = action.payload;
     },
   },
 });
 
 export const selectMonth = (state: RootState) => state.calendar.currentMonth;
-export const selectSelectedDay = (state: RootState) =>
-  state.calendar.selectedDay;
-export const { move, selectDay } = calendarSlice.actions;
+export const selectDay = (state: RootState) => state.calendar.selectedDay;
+export const { move, setDay } = calendarSlice.actions;
 export default calendarSlice.reducer;

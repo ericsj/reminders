@@ -13,5 +13,5 @@ export const getMonthName = (index: number) => {
     "November",
     "December",
   ];
-  return monthNames[index];
+  return monthNames[index - 1];
 };

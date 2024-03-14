@@ -1,6 +1,6 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { selectDay, selectMonth, selectSelectedDay } from "../calendarSlice";
+import { setDay, selectMonth, selectDay } from "../calendarSlice";
 import {
   refreshReminder,
   selectReminderDates,
@@ -13,7 +13,7 @@ type IDayProps = {
 };
 
 export const Day = ({ day }: IDayProps) => {
-  const selectedDay = useSelector(selectSelectedDay);
+  const selectedDay = useSelector(selectDay);
   const month = useSelector(selectMonth);
   const reminderDates = useSelector(selectReminderDates);
   const dispatch: AppDispatch = useDispatch();
@@ -21,7 +21,7 @@ export const Day = ({ day }: IDayProps) => {
     .map((date) => date.date() + 1)
     .includes(day);
   const handleClick = () => {
-    dispatch(selectDay(day));
+    dispatch(setDay(day));
     dispatch(refreshReminder({ month, day }));
   };
   const isSelected = selectedDay === day;
@@ -33,6 +33,7 @@ export const Day = ({ day }: IDayProps) => {
       sx={{
         display: "flex",
         justifyContent: "center",
+        position: "relative",
       }}
     >
       <Box
@@ -46,6 +47,7 @@ export const Day = ({ day }: IDayProps) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
+          position: "relative",
         }}
       >
         <Typography
@@ -57,16 +59,13 @@ export const Day = ({ day }: IDayProps) => {
         </Typography>
       </Box>
       {dayHasEvents && (
-        <Box
-          sx={{
+        <NotificationPoint
+          style={{
             position: "absolute",
-            marginRight: "-35px",
-            display: "flex",
-            boxSizing: "border-box",
+            right: "6px",
+            top: "6px",
           }}
-        >
-          <NotificationPoint />
-        </Box>
+        />
       )}
     </Grid>
   );
