@@ -1,3 +1,5 @@
+This web app allows adding/editing/removing reminders. It allows changing the calendar months and there is a blue dot next to the days that there are reminders added, so you can click on a day to check the reminders of that day.
+
 # [Live demo link](https://reminders-eric.netlify.app/)
 ![img](https://i.imgur.com/JrotOUa.png)
 # How to run the project
