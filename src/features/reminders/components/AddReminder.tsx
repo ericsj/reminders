@@ -11,18 +11,28 @@ import { getCurrentDate } from "../../../util/getCurrentDate";
 import { Field, Form, Formik, FormikProps } from "formik";
 import { reminderInitial } from "../../../constants/reminderInitial";
 import { IReminderFormatted } from "../interfaces";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../app/store";
 import { createReminder, setTab } from "../remindersSlice";
 import { reminderColors } from "../../../constants/reminderColors";
+import { formSchema } from "../formSchema";
+import { selectDay, selectMonth } from "../../calendar/calendarSlice";
 
 export const AddReminder = () => {
   const dispatch: AppDispatch = useDispatch();
-
+  const month = useSelector(selectMonth);
+  const day = useSelector(selectDay);
   return (
     <Formik
-      initialValues={reminderInitial}
-      onSubmit={async (values) => dispatch(createReminder(values))}
+      initialValues={{
+        ...reminderInitial,
+        date: `${`0${month}`.slice(-2)}/${`0${day}`.slice(-2)}/2024`,
+      }}
+      onSubmit={async (values) => {
+        dispatch(createReminder(values));
+        dispatch(setTab("list"));
+      }}
+      validationSchema={formSchema}
     >
       {(props: FormikProps<IReminderFormatted>) => (
         <Form>
@@ -31,7 +41,7 @@ export const AddReminder = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              rowGap: "40px",
+              rowGap: "20px",
               padding: "0 40px 0 40px",
               boxSizing: "border-box",
               width: "669px",
@@ -49,7 +59,7 @@ export const AddReminder = () => {
             </Typography>
             <Field name="title">
               {({ field, meta }) => (
-                <FormGroup>
+                <FormGroup sx={{ height: "90px" }}>
                   <FormLabel>Title</FormLabel>
                   <TextField
                     required
@@ -64,10 +74,12 @@ export const AddReminder = () => {
             </Field>
             <Field name="description">
               {({ field, meta }) => (
-                <FormGroup>
+                <FormGroup sx={{ height: "140px" }}>
                   <FormLabel>Description</FormLabel>
                   <TextField
                     size="small"
+                    multiline
+                    rows={3}
                     required
                     error={Boolean(meta.touched && meta.error)}
                     helperText={meta.touched && meta.error}
@@ -86,7 +98,7 @@ export const AddReminder = () => {
             >
               <Field name="date">
                 {({ field, meta }) => (
-                  <FormGroup>
+                  <FormGroup sx={{ height: "90px" }}>
                     <FormLabel>Date</FormLabel>
                     <TextField
                       required
@@ -101,7 +113,7 @@ export const AddReminder = () => {
               </Field>
               <Field name="time">
                 {({ field, meta }) => (
-                  <FormGroup>
+                  <FormGroup sx={{ height: "90px" }}>
                     <FormLabel>time</FormLabel>
                     <TextField
                       required
@@ -128,6 +140,7 @@ export const AddReminder = () => {
                   {reminderColors.map((color) => (
                     <Box
                       sx={{
+                        margin: "3px",
                         width: "55px",
                         height: "48px",
                         borderRadius: "6%",

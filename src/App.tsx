@@ -1,13 +1,15 @@
-import React from "react";
 import { Layout } from "./components/Layout";
 import { theme } from "./theme";
 import { ThemeProvider } from "@mui/material";
+import { SnackbarProvider } from "notistack";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <Layout />
-    </ThemeProvider>
+    <SnackbarProvider>
+      <ThemeProvider theme={theme}>
+        <Layout />
+      </ThemeProvider>
+    </SnackbarProvider>
   );
 }
 

@@ -18,7 +18,7 @@ export const Day = ({ day }: IDayProps) => {
   const reminderDates = useSelector(selectReminderDates);
   const dispatch: AppDispatch = useDispatch();
   const dayHasEvents = reminderDates
-    .map((date) => date.date() + 1)
+    .map((date) => date.tz("GMT0").date())
     .includes(day);
   const handleClick = () => {
     dispatch(setDay(day));

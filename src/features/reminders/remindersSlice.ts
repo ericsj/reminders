@@ -1,20 +1,25 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
+import { enqueueSnackbar } from "notistack";
 import axios from "axios";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {
   IFetchRemindersResponse,
-  IPrepareReminder,
   IRefreshReminderArgs,
   IReminderApiResponse,
   IReminderDate,
+  IReminderForm,
   IReminderFormatted,
   IReminderState,
-  IUpdateReminderArgs,
 } from "./interfaces";
 import { RootState } from "../../app/store";
-import dayjs from "dayjs";
 
 const REMINDERS_URL = process.env.REACT_APP_API as string;
 const REMINDERS_TOKEN = process.env.REACT_APP_TOKEN as string;
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const initialState = {
   reminders: [],
@@ -48,11 +53,11 @@ export const fetchReminders = createAsyncThunk(
 );
 export const createReminder = createAsyncThunk(
   "reminders/createReminder",
-  async (data: IReminderFormatted) => {
+  async (data: IReminderForm) => {
     const apiData = {
       title: data.title,
       description: data.description,
-      date: data.date.toISOString(),
+      date: dayjs(`${data.date}-${data.time}`, "MM/DD/YYYY-HH:mm"),
       color: data.color,
       token: REMINDERS_TOKEN,
     };
@@ -61,6 +66,7 @@ export const createReminder = createAsyncThunk(
         `${REMINDERS_URL}`,
         apiData
       );
+      enqueueSnackbar("Reminder created successfully", { variant: "success" });
       return response.data;
     } catch (err) {
       return err;
@@ -69,20 +75,34 @@ export const createReminder = createAsyncThunk(
 );
 export const updateReminder = createAsyncThunk(
   "reminders/updateReminder",
-  async ({ id, data }: IUpdateReminderArgs) => {
+  async (data: IReminderForm) => {
+    const apiData = {
+      title: data.title,
+      description: data.description,
+      date: dayjs(`${data.date}-${data.time}`, "MM/DD/YYYY-HH:mm"),
+      color: data.color,
+    };
     try {
-      await axios.patch<void>(
-        `${REMINDERS_URL}/${REMINDERS_TOKEN}/${id}`,
-        data
+      await axios.patch<IReminderApiResponse>(
+        `${REMINDERS_URL}/${REMINDERS_TOKEN}/${data.id}`,
+        apiData
       );
-      const formattedReminder: IReminderFormatted = {
-        id,
-        title: data.title,
-        description: data.description,
-        date: dayjs(new Date(data.date)),
-        color: data.color,
-      };
-      return formattedReminder;
+      enqueueSnackbar("Reminder updated successfully", { variant: "success" });
+      return { ...apiData, id: data.id };
+    } catch (err) {
+      return err;
+    }
+  }
+);
+export const removeReminder = createAsyncThunk(
+  "reminders/removeReminder",
+  async (id: string) => {
+    try {
+      await axios.delete<IReminderApiResponse>(
+        `${REMINDERS_URL}/${REMINDERS_TOKEN}/${id}`
+      );
+      enqueueSnackbar("Reminder removed successfully", { variant: "success" });
+      return id;
     } catch (err) {
       return err;
     }
@@ -93,23 +113,6 @@ const remindersSlice = createSlice({
   initialState,
   name: "reminders",
   reducers: {
-    addReminder: {
-      reducer: (state, action: PayloadAction<IReminderFormatted>) => {
-        state.reminders.push(action.payload);
-      },
-      prepare: (props: IPrepareReminder) => {
-        const { id, title, description, date, color } = props;
-        return {
-          payload: {
-            id,
-            title,
-            description,
-            date: dayjs(date).toISOString(),
-            color,
-          },
-        };
-      },
-    },
     setReminderStatus: (state, action: PayloadAction<string>) => {
       state.status = action.payload;
     },
@@ -183,13 +186,29 @@ const remindersSlice = createSlice({
         updateReminder.fulfilled,
         (state, action: PayloadAction<IReminderFormatted>) => {
           state.status = "succeeded";
-          state.reminders.filter(
+          state.reminders = state.reminders.filter(
             (reminder) => reminder.id !== action.payload.id
           );
           state.reminders.push(action.payload);
         }
       )
       .addCase(updateReminder.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(removeReminder.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(
+        removeReminder.fulfilled,
+        (state, action: PayloadAction<string>) => {
+          state.status = "succeeded";
+          state.reminders = state.reminders.filter(
+            (reminder) => reminder.id !== action.payload
+          );
+        }
+      )
+      .addCase(removeReminder.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
@@ -213,7 +232,6 @@ export const getRemindersError = (state: RootState) => state.reminders.error;
 export const {
   setReminderStatus,
   setTab,
-  addReminder,
   refreshReminder,
   setReminderToEdit,
   setFilteredReminders,

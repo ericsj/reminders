@@ -28,10 +28,11 @@ export function ReminderList() {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              width: "100%",
+              width: "90%",
               height: "500px",
               overflowY: "scroll",
             }}
+            className="custom-scrollbar"
           >
             {reminders.map((reminder) => (
               <ReminderModal reminder={reminder} />

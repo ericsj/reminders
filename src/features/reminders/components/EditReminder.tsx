@@ -9,24 +9,36 @@ import {
 } from "@mui/material";
 import { getCurrentDate } from "../../../util/getCurrentDate";
 import { Field, Form, Formik, FormikProps } from "formik";
-import { reminderInitial } from "../../../constants/reminderInitial";
 import { IReminderFormatted } from "../interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../../../app/store";
 import {
-  createReminder,
+  removeReminder,
   selectReminderToEdit,
   setTab,
+  updateReminder,
 } from "../remindersSlice";
 import { reminderColors } from "../../../constants/reminderColors";
+import { formSchema } from "../formSchema";
 
 export const EditReminder = () => {
   const dispatch: AppDispatch = useDispatch();
-  const reminderToEdit = useSelector(selectReminderToEdit);
+  const { date, ...reminderToEdit } = useSelector(
+    selectReminderToEdit
+  ) as IReminderFormatted;
+  const initial = {
+    ...reminderToEdit,
+    date: date.format("MM/DD/YYYY"),
+    time: date.format("HH:mm"),
+  };
   return (
     <Formik
-      initialValues={reminderToEdit as IReminderFormatted}
-      onSubmit={async (values) => dispatch(createReminder(values))}
+      validationSchema={formSchema}
+      initialValues={initial}
+      onSubmit={async (values) => {
+        dispatch(updateReminder(values));
+        dispatch(setTab("list"));
+      }}
     >
       {(props: FormikProps<IReminderFormatted>) => (
         <Form>
@@ -35,7 +47,7 @@ export const EditReminder = () => {
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
-              rowGap: "40px",
+              rowGap: "20px",
               padding: "0 40px 0 40px",
               boxSizing: "border-box",
               width: "669px",
@@ -49,11 +61,11 @@ export const EditReminder = () => {
                 color: "#384042",
               }}
             >
-              {`Add Reminder - ${getCurrentDate()}`}
+              {`Edit Reminder - ${getCurrentDate()}`}
             </Typography>
             <Field name="title">
               {({ field, meta }) => (
-                <FormGroup>
+                <FormGroup sx={{ height: "90px" }}>
                   <FormLabel>Title</FormLabel>
                   <TextField
                     required
@@ -68,7 +80,7 @@ export const EditReminder = () => {
             </Field>
             <Field name="description">
               {({ field, meta }) => (
-                <FormGroup>
+                <FormGroup sx={{ height: "140px" }}>
                   <FormLabel>Description</FormLabel>
                   <TextField
                     size="small"
@@ -90,7 +102,7 @@ export const EditReminder = () => {
             >
               <Field name="date">
                 {({ field, meta }) => (
-                  <FormGroup>
+                  <FormGroup sx={{ height: "90px" }}>
                     <FormLabel>Date</FormLabel>
                     <TextField
                       required
@@ -105,8 +117,8 @@ export const EditReminder = () => {
               </Field>
               <Field name="time">
                 {({ field, meta }) => (
-                  <FormGroup>
-                    <FormLabel>time</FormLabel>
+                  <FormGroup sx={{ height: "90px" }}>
+                    <FormLabel>Time</FormLabel>
                     <TextField
                       required
                       size="small"
@@ -135,6 +147,7 @@ export const EditReminder = () => {
                         width: "55px",
                         height: "48px",
                         borderRadius: "6%",
+                        margin: "3px",
                         border:
                           props.values.color === color
                             ? "6px solid #101277"
@@ -157,12 +170,16 @@ export const EditReminder = () => {
             >
               <Button
                 variant="contained"
-                type="submit"
+                type="button"
                 sx={{
                   backgroundColor: "error.main",
                   color: "primary.main",
                   width: "108px",
                   height: "49px",
+                }}
+                onClick={() => {
+                  dispatch(removeReminder(reminderToEdit.id));
+                  dispatch(setTab("list"));
                 }}
               >
                 Remove

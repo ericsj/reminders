@@ -23,7 +23,7 @@ export function ReminderModal({ reminder }: IReminderModalProps) {
         justifyContent: "space-between",
         alignItems: "center",
         borderRadius: "18px",
-        width: "567px",
+        width: "92%",
         height: "134px",
         padding: "10px",
         boxSizing: "border-box",
@@ -49,10 +49,22 @@ export function ReminderModal({ reminder }: IReminderModalProps) {
           justifyContent: "center",
         }}
       >
-        <Typography sx={{ color: "info.main", fontSize: "14px" }}>
+        <Typography
+          sx={{
+            color: "info.main",
+            fontSize: "14px",
+          }}
+        >
           {reminder.title}
         </Typography>
-        <Typography sx={{ color: "secondary.main", fontSize: "18px" }}>
+        <Typography
+          sx={{
+            color: "secondary.main",
+            fontSize: "18px",
+            overflowWrap: "break-word",
+            fontWeight: 600,
+          }}
+        >
           {reminder.description}
         </Typography>
       </Box>

@@ -10,7 +10,9 @@ export function Error() {
         height: "100%",
       }}
     >
-      <Typography>Something went wrong. Try again later</Typography>
+      <Typography sx={{ color: "primary.main" }}>
+        Something went wrong. Try again later
+      </Typography>
     </Box>
   );
 }

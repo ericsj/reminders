@@ -47,6 +47,14 @@ export type IReminderFormatted = {
   date: dayjs.Dayjs;
   color: string;
 };
+export type IReminderForm = {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  color: string;
+};
 
 export interface IReminderState {
   reminders: IReminderFormatted[];
