@@ -137,8 +137,9 @@ export const AddReminder = () => {
                     alignItems: "center",
                   }}
                 >
-                  {reminderColors.map((color) => (
+                  {reminderColors.map((color, index) => (
                     <Box
+                      key={index}
                       sx={{
                         margin: "3px",
                         width: "55px",

@@ -14,15 +14,19 @@ export function Calendar() {
       columns={{ xs: 7 }}
       sx={{ height: "207px", width: "300px" }}
     >
-      {weekDays.map((day) => (
-        <Grid item xs={1}>
+      {weekDays.map((day, index) => (
+        <Grid item key={index} xs={1}>
           <Typography sx={{ textAlign: "center", color: "primary.main" }}>
             {day}
           </Typography>
         </Grid>
       ))}
-      {monthsConfigurations[currentMonthIndex].map((day) =>
-        day ? <Day day={day} /> : <Grid item xs={1}></Grid>
+      {monthsConfigurations[currentMonthIndex].map((day, index) =>
+        day ? (
+          <Day day={day} key={index} />
+        ) : (
+          <Grid key={index} item xs={1}></Grid>
+        )
       )}
     </Grid>
   );

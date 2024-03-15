@@ -34,8 +34,8 @@ export function ReminderList() {
             }}
             className="custom-scrollbar"
           >
-            {reminders.map((reminder) => (
-              <ReminderModal reminder={reminder} />
+            {reminders.map((reminder, index) => (
+              <ReminderModal key={index} reminder={reminder} />
             ))}
           </Box>
         )}

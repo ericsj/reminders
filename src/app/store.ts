@@ -7,6 +7,8 @@ export const store = configureStore({
     reminders: remindersReducer,
     calendar: calendarReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

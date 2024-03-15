@@ -141,8 +141,9 @@ export const EditReminder = () => {
                     alignItems: "center",
                   }}
                 >
-                  {reminderColors.map((color) => (
+                  {reminderColors.map((color, index) => (
                     <Box
+                      key={index}
                       sx={{
                         width: "55px",
                         height: "48px",
