@@ -1,3 +1,5 @@
+# [Live demo link](https://reminders-eric.netlify.app/)
+
 # How to run the project
 
 1. Run `npm i` to install dependencies
