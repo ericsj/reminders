@@ -1,5 +1,4 @@
 import { Box } from "@mui/material";
-import { ReactComponent as CodelittLogo } from "../assets/codelitt-logo.svg";
 import { RemindersAndCalendar } from "./RemindersAndCalendar";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -34,9 +33,6 @@ export function Layout() {
         height: "100%",
       }}
     >
-      <Box sx={{ width: "1119px" }}>
-        <CodelittLogo />
-      </Box>
       <RemindersAndCalendar />
     </Box>
   );

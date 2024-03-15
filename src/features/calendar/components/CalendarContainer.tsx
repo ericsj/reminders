@@ -44,7 +44,7 @@ export function CalendarContainer() {
           </Box>
           <CalendarBox />
           <Typography sx={{ color: "primary.main" }}>
-            © 2022 Codelitt Inc All rights reserved
+            © 2024 Eric Jovelli
           </Typography>
         </>
       );
